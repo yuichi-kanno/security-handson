@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>attacker.example</title>
+    <script>
+      function load() {
+        const userInfo = frm.document.querySelector("#user_info");
+        console.log(userInfo.textContent);
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <!-- 罠コンテンツ -->
+    </div>
+
+    <iframe
+      name="frm"
+      onload="load()"
+      src="http://site.example:3000/user.html"
+      width="80%"
+    ></iframe>
+  </body>
+</html>
