@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CSP検証ページ</title>
+	</head>
+	<body>
+		<script nonce="<%= nonce %>">
+			// alert("Hello CSP");
+
+			const script = document.createElement("script");
+			script.src = "/csp-test.js";
+			document.body.appendChild(script);
+		</script>
+	</body>
+</html>
