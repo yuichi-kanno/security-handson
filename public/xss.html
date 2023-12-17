@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XSS検証用ページ</title>
+  </head>
+  <body>
+    <h1>XSS検証用ページ</h1>
+    <div id="result"></div>
+    <a id="link" href="#">リンクをクリック</a>
+
+    <script>
+      const url = new URL(location.href);
+      const message = url.searchParams.get("message");
+      if (message !== null) {
+        // document.querySelector("#result").innerHTML = message;
+        const textNode = document.createTextNode(message);
+        document.querySelector("#result").appendChild(textNode);
+      }
+
+      const urlStr = url.searchParams.get("url");
+      if (urlStr !== null) {
+        const linkUrl = new URL(urlStr, url.origin);
+        // document.querySelector("#link").href = linkUrl;
+        if (linkUrl.protocol === "http:" || linkUrl.protocol === "https:") {
+          document.querySelector("#link").href = linkUrl;
+        } else {
+          console.warn("httpまたはhttps以外のURLが指定されています。");
+        }
+      }
+    </script>
+  </body>
+</html>
