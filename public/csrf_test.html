@@ -19,5 +19,19 @@
         <button type="submit">送金</button>
       </div>
     </form>
+    <script>
+      // Cookieからトークンを取得
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("csrf_token="))
+        .split("=")[1];
+
+      // フォームにトークンを持つ非表示な<input>要素を追加
+      const el = document.createElement("input");
+      el.type = "hidden";
+      el.name = "csrf_token";
+      el.value = token;
+      document.getElementById("remit").appendChild(el);
+    </script>
   </body>
 </html>
