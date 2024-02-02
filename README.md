@@ -90,4 +90,73 @@ https://developer.mozilla.org/ja/docs/Glossary/Preflight_request
 
 
 
-# XSS
+# XSS（クロスサイトスクリプティング）
+
+XSSとは、攻撃者が不正なスクリプトを攻撃対象ページのHTMLに挿入して、ユーザーに不正スクリプトを実行させる攻撃手法です。ユーザーが入力した文字列をそのままHTMLへ挿入することで発生する脆弱性です。  
+XSSの脅威には機密情報の漏洩、Webアプリケーションの改ざん、なりすましなどが挙げられます。
+
+## 攻撃手法
+
+以下の3つがあります。
+
+- 反射型XSS（Reflected XSS）
+- 蓄積型XSS（Stored XSS）
+- DOM-based XSS
+
+### 反射型XSS（Reflected XSS）
+
+攻撃者が用意した罠により不正なスクリプトを含むHTMLをサーバで組み立てることで発生するもの。
+
+### 蓄積型XSS（Stored XSS）
+
+攻撃者が投稿した不正なスクリプトを含むデータがサーバ上に保存され、その保存されたデータ内のスクリプトが利用者がページを表示する際に実行されてしまうもの。
+
+### DOM-based XSS
+
+JavaScriptでDOM操作をする際に不正なスクリプトが実行されて発生するもの。
+今回はフロントエンドに関するセキュリティを勉強するので、こちらを主に深ぼっていく。
+
+
+#### DOM-based XSSの発生例
+
+`https://hogehoge.com/#こんにちは` の「こんにちは」という文字列をDOMへ挿入したい場合、下記のようなコードが実装されたとします。
+
+```
+const message = decodeURIComponent(location.hash.slice(1));
+document.getElementById('message').innerHTML = message;
+```
+
+この場合、下記の要因反映されます。
+```
+<div id='message'>こんにちは</div>
+```
+
+しかし、URLが`https://hogehoge.com/#<img src= x onerror="location.href='https://hogeattack.xxx'" />` の場合、下記のようなHTMLとなります。
+```
+<div id='message'>
+  <img src= x onerror="location.href='https://hogeattack.xxx'" />
+</div>
+``` 
+挿入された文字列が<img>タグとしてブラウザに解釈され、on errorに指定したJavaScriptコードが実行されてしまいます。  
+そのため対策が必要なのです。
+
+
+### XSS の対策
+
+対策としてはいくつか挙げられます。細かく見ると長くなるため、詳細は調べるor著書を読んでください。
+
+- 文字列のエスケープ処理
+- 属性値の文字列をクオーテーションで囲む
+- リンクのURLスキームをhttp/httpsに限定する
+- Cookie にHTTPOnly属性を付与する
+- フレームワークの機能に則る
+- Content Security Policy(CSP)を導入する
+
+
+
+参考：  
+https://zenn.dev/oreo2990/articles/d33a264b2d8b4c
+
+
+
+# CSRF（クロスサイトリクエストフォージェリ）
